@@ -6,10 +6,17 @@ return {
 		"nvim-tree/nvim-web-devicons",
 		"MunifTanjim/nui.nvim",
 	},
-	keys ={
-		{ "<leader>ft", "<cmd>Neotree toggle<cr>", desc = "NeoTree"},
+	keys = {
+		{ "<leader>ft", "<cmd>Neotree toggle<cr>", desc = "NeoTree" },
 
-	}
-	
+	},
+	config = function()
+		require('neo-tree').setup({
+			window = {
+				position = "float"
+			},
+		})
+	end
+
+
 }
-
