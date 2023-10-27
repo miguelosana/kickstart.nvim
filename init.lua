@@ -371,13 +371,6 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 
--- Auto format buffer before Save
-vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-  callback = function()
-    vim.lsp.buf.format()
-  end
-
-})
 
 -- Terraform file type work around nvim < 0.9.4
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
