@@ -18,6 +18,7 @@ return {
       python = { 'yapf' },
       javascript = { 'prettier' },
       go = { 'gofmt' },
+      svelte = { 'prettier' },
     },
     format_on_save = { timeout_ms = 500, lsp_fallback = false },
   },
