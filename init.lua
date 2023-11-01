@@ -76,7 +76,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -115,7 +115,6 @@ require('lazy').setup({
       end,
     },
   },
-
 
   {
     -- Set lualine as statusline
@@ -162,6 +161,10 @@ require('lazy').setup({
         end,
       },
     },
+  },
+  {
+    'nvim-telescope/telescope-file-browser.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
   },
 
   {
@@ -229,7 +232,7 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
-vim.o.background = "dark"
+vim.o.background = 'dark'
 
 require('vscode').load()
 -- [[ Basic Keymaps ]]
@@ -264,10 +267,20 @@ require('telescope').setup {
       },
     },
   },
+  extensions = {
+    file_browser = {
+      hidden = true,
+      mappings = {
+        ['i'] = {},
+        ['n'] = {},
+      },
+    },
+  },
 }
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
+pcall(require('telescope').load_extension, 'file_browser')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -288,14 +301,15 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 
+vim.keymap.set('n', '<leader>ft', ':Telescope file_browser path=%:p:h select_buffer=true<cr>', { desc = '[F]ile browser [T]elescope' })
+
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim',
-      'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -359,13 +373,14 @@ vim.defer_fn(function()
 end, 0)
 
 -- Custom keymaps
-vim.keymap.set('n', '<C-s>', ':w!<cr>', { desc = "Save file" })
-vim.keymap.set('v', '<leader>sy', '"sy', { desc = "[S]nippet [Y]ank" })
-vim.keymap.set('n', '<leader>sp', function() require('luasnip.extras.otf').on_the_fly("s") end,
-  { desc = "[S]nippet [P]aste" })
-vim.keymap.set('n', '<leader>sa', function() require('luasnip').activate_node() end,
-  { desc = "[S]nippet [A]ctivate node" })
-
+vim.keymap.set('n', '<C-s>', ':w!<cr>', { desc = 'Save file' })
+vim.keymap.set('v', '<leader>sy', '"sy', { desc = '[S]nippet [Y]ank' })
+vim.keymap.set('n', '<leader>sp', function()
+  require('luasnip.extras.otf').on_the_fly 's'
+end, { desc = '[S]nippet [P]aste' })
+vim.keymap.set('n', '<leader>sa', function()
+  require('luasnip').activate_node()
+end, { desc = '[S]nippet [A]ctivate node' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
@@ -373,12 +388,10 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
-
-
 -- Terraform file type work around nvim < 0.9.4
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = { '*.tfvars' },
-  command = 'set filetype=terraform'
+  command = 'set filetype=terraform',
 })
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
@@ -538,5 +551,7 @@ cmp.setup {
   },
 }
 
+-- relative numbers
+vim.wo.relativenumber = true
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

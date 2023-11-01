@@ -20,6 +20,6 @@ return {
       go = { 'gofmt' },
       svelte = { 'prettier' },
     },
-    format_on_save = { timeout_ms = 500, lsp_fallback = false },
+    format_on_save = { timeout_ms = 3000, lsp_fallback = false },
   },
 }
